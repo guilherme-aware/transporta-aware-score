@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { FilterSidebar } from "@/components/FilterSidebar";
 import { TransportadoraCard } from "@/components/TransportadoraCard";
+import { SearchCard } from "@/components/SearchCard";
 import { transportadorasData } from "@/data/transportadoras";
 
 const Index = () => {
@@ -61,6 +62,28 @@ const Index = () => {
     window.open(`/transportadora/${id}`, '_blank');
   };
 
+  const handleSearch = (searchFilters: { nome: string; regiao: string; hasAwareSeal: string }) => {
+    setSearchTerm(searchFilters.nome);
+    
+    const newFilters = {
+      ...filters,
+      regioes: searchFilters.regiao && searchFilters.regiao !== "all" ? [searchFilters.regiao] : [],
+      hasAwareSeal: searchFilters.hasAwareSeal === "yes"
+    };
+    
+    setFilters(newFilters);
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm("");
+    setFilters({
+      regioes: [],
+      portes: [],
+      tiposOperacao: [],
+      hasAwareSeal: false
+    });
+  };
+
   // Check if there are active filters
   const hasActiveFilters = filters.regioes.length > 0 || 
                           filters.portes.length > 0 || 
@@ -95,6 +118,9 @@ const Index = () => {
 
         {/* Main Content */}
         <main className="flex-1 p-6">
+          {/* Search Card */}
+          <SearchCard onSearch={handleSearch} onClear={handleClearSearch} />
+
           {/* Results Header */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-4">
