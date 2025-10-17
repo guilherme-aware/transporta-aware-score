@@ -1,6 +1,7 @@
-import { Search, Menu, Truck } from "lucide-react";
+import { Search, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import awareLogo from "@/assets/aware-logo.png";
 
 interface HeaderProps {
   searchTerm: string;
@@ -14,8 +15,8 @@ export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps
       <div className="container mx-auto px-4 h-16 flex items-center">
         {/* Logo */}
         <div className="flex items-center space-x-2 mr-6">
-          <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-            <Truck className="h-5 w-5 text-primary-foreground" />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+            <img src={awareLogo} alt="LogiRep Logo" className="w-full h-full object-cover" />
           </div>
           <h1 className="text-xl font-bold text-foreground">LogiRep</h1>
         </div>
