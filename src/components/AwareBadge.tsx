@@ -1,5 +1,5 @@
 import { ShieldCheck } from "lucide-react";
-import { Medal } from "lucide-react";
+import { Award } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface AwareBadgeProps {
@@ -36,7 +36,7 @@ export const AwareBadge = ({ size = "md", showText = true }: AwareBadgeProps) =>
       <ShieldCheck 
         className={`${iconSizes[size]} text-[hsl(var(--primary))]`}
         strokeWidth={2.5} />
-      <Medal 
+      <Award 
         className={`${iconSizes[size]} text-[hsl(var(--primary))]`} 
         strokeWidth={2.5} 
       />
