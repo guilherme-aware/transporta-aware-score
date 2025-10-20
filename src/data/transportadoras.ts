@@ -2,6 +2,11 @@ import logoRapidex from "@/assets/logo-rapidex.png";
 import logoTranscarga from "@/assets/logo-transcarga.png";
 import logoAerotrans from "@/assets/logo-aerotrans.png";
 import logoMartrans from "@/assets/logo-martrans.png";
+import logoGMS from "@/assets/logo-gms.png";
+import logoGrupoSanches from "@/assets/logo-grupo-sanches.png";
+import logoCozapi from "@/assets/logo-cozapi.png";
+import logoDRK from "@/assets/logo-drk.jpg";
+import logoDSV from "@/assets/logo-dsv.png";
 
 export interface Comentario {
   id: number;
@@ -36,6 +41,106 @@ export interface Transportadora {
 export const transportadorasData: Transportadora[] = [
   {
     id: "1",
+    nome: "GMS Transportes",
+    logo: logoGMS,
+    rating: 5,
+    totalAvaliacoes: 1000,
+    regiao: "Nordeste",
+    porte: "Grande" as const,
+    tipoOperacao: ["Rodoviário", "Expressa"],
+    hasAwareSeal: true,
+    email: "contato@gmstransporte.com.br",
+    website: "www.gmstransporte.com.br",
+    indicadores: {
+      indiceSolucao: 100,
+      nivelServico: 100,
+      tempoResposta: "1h",
+    },
+    reputacao: "Excelente" as const,
+    comentarios: [] as Comentario[],
+  },
+  {
+    id: "2",
+    nome: "Grupo Sanches",
+    logo: logoGrupoSanches,
+    rating: 5,
+    totalAvaliacoes: 1000,
+    regiao: "Brasil",
+    porte: "Grande" as const,
+    tipoOperacao: ["Rodoviário", "Expressa"],
+    hasAwareSeal: true,
+    email: "contato@gruposanches.com.br",
+    website: "www.gruposanches.com.br",
+    indicadores: {
+      indiceSolucao: 100,
+      nivelServico: 100,
+      tempoResposta: "1h",
+    },
+    reputacao: "Excelente" as const,
+    comentarios: [] as Comentario[],
+  },
+  {
+    id: "3",
+    nome: "Cozapi Transportes",
+    logo: logoCozapi,
+    rating: 5,
+    totalAvaliacoes: 1000,
+    regiao: "Brasil",
+    porte: "Grande" as const,
+    tipoOperacao: ["Rodoviário", "Expressa"],
+    hasAwareSeal: true,
+    email: "comercial@cozapi.com.br ",
+    website: "www.cozapi.com.br",
+    indicadores: {
+      indiceSolucao: 100,
+      nivelServico: 100,
+      tempoResposta: "1h",
+    },
+    reputacao: "Excelente" as const,
+    comentarios: [] as Comentario[],
+  },
+  {
+    id: "4",
+    nome: "Dorf Ketal",
+    logo: logoDRK,
+    rating: 5,
+    totalAvaliacoes: 1000,
+    regiao: "Mundial",
+    porte: "Grande" as const,
+    tipoOperacao: ["Rodoviário", "Expressa"],
+    hasAwareSeal: true,
+    email: "queries.latinamerica@dorfketal.com",
+    website: "www.dorfketal.com",
+    indicadores: {
+      indiceSolucao: 100,
+      nivelServico: 100,
+      tempoResposta: "1h",
+    },
+    reputacao: "Excelente" as const,
+    comentarios: [] as Comentario[],
+  },
+  {
+    id: "5",
+    nome: "DSV: Transporte e Logística Global",
+    logo: logoDSV,
+    rating: 5,
+    totalAvaliacoes: 1000,
+    regiao: "Mundial",
+    porte: "Grande" as const,
+    tipoOperacao: ["Rodoviário", "Expressa"],
+    hasAwareSeal: true,
+    email: "contato@dsv.com",
+    website: "www.dsv.com/pt-br",
+    indicadores: {
+      indiceSolucao: 100,
+      nivelServico: 100,
+      tempoResposta: "1h",
+    },
+    reputacao: "Excelente" as const,
+    comentarios: [] as Comentario[],
+  },
+  {
+    id: "6",
     nome: "Rapidex Logística",
     logo: logoRapidex,
     rating: 4.8,
@@ -49,13 +154,13 @@ export const transportadorasData: Transportadora[] = [
     indicadores: {
       indiceSolucao: 92,
       nivelServico: 89,
-      tempoResposta: "2h"
+      tempoResposta: "2h",
     },
     reputacao: "Excelente" as const,
-    comentarios: [] as Comentario[]
+    comentarios: [] as Comentario[],
   },
   {
-    id: "2", 
+    id: "7",
     nome: "TransCarga Brasil",
     logo: logoTranscarga,
     rating: 4.5,
@@ -69,32 +174,13 @@ export const transportadorasData: Transportadora[] = [
     indicadores: {
       indiceSolucao: 88,
       nivelServico: 85,
-      tempoResposta: "3h"
+      tempoResposta: "3h",
     },
     reputacao: "Bom" as const,
-    comentarios: [] as Comentario[]
+    comentarios: [] as Comentario[],
   },
   {
-    id: "3",
-    nome: "LogiNordeste",
-    rating: 4.2,
-    totalAvaliacoes: 432,
-    regiao: "Nordeste", 
-    porte: "Médio" as const,
-    tipoOperacao: ["Rodoviário", "Carga Geral"],
-    hasAwareSeal: false,
-    email: "contato@loginordeste.com.br",
-    website: "www.loginordeste.com.br",
-    indicadores: {
-      indiceSolucao: 82,
-      nivelServico: 79,
-      tempoResposta: "4h"
-    },
-    reputacao: "Bom" as const,
-    comentarios: [] as Comentario[]
-  },
-  {
-    id: "4",
+    id: "8",
     nome: "AeroTrans Cargo",
     logo: logoAerotrans,
     rating: 4.7,
@@ -108,32 +194,13 @@ export const transportadorasData: Transportadora[] = [
     indicadores: {
       indiceSolucao: 94,
       nivelServico: 92,
-      tempoResposta: "1h"
+      tempoResposta: "1h",
     },
     reputacao: "Excelente" as const,
-    comentarios: [] as Comentario[]
+    comentarios: [] as Comentario[],
   },
   {
-    id: "5",
-    nome: "RodoCenter",
-    rating: 3.8,
-    totalAvaliacoes: 298,
-    regiao: "Centro-Oeste",
-    porte: "Pequeno" as const,
-    tipoOperacao: ["Rodoviário"],
-    hasAwareSeal: false,
-    email: "contato@rodocenter.com.br",
-    website: "www.rodocenter.com.br",
-    indicadores: {
-      indiceSolucao: 75,
-      nivelServico: 72,
-      tempoResposta: "6h"
-    },
-    reputacao: "Regular" as const,
-    comentarios: [] as Comentario[]
-  },
-  {
-    id: "6",
+    id: "9",
     nome: "MarTrans Portuário",
     logo: logoMartrans,
     rating: 4.6,
@@ -147,85 +214,9 @@ export const transportadorasData: Transportadora[] = [
     indicadores: {
       indiceSolucao: 90,
       nivelServico: 87,
-      tempoResposta: "2h"
+      tempoResposta: "2h",
     },
     reputacao: "Excelente" as const,
-    comentarios: [] as Comentario[]
+    comentarios: [] as Comentario[],
   },
-  {
-    id: "7",
-    nome: "Ferro Logistics",
-    rating: 4.3,
-    totalAvaliacoes: 512,
-    regiao: "Sudeste",
-    porte: "Grande" as const,
-    tipoOperacao: ["Ferroviário", "Carga Geral"],
-    hasAwareSeal: false,
-    email: "contato@ferrologistics.com.br",
-    website: "www.ferrologistics.com.br",
-    indicadores: {
-      indiceSolucao: 84,
-      nivelServico: 81,
-      tempoResposta: "5h"
-    },
-    reputacao: "Bom" as const,
-    comentarios: [] as Comentario[]
-  },
-  {
-    id: "8",
-    nome: "Especializada Norte",
-    rating: 4.1,
-    totalAvaliacoes: 156,
-    regiao: "Norte",
-    porte: "Pequeno" as const,
-    tipoOperacao: ["Especializada"],
-    hasAwareSeal: false,
-    email: "contato@especializadanorte.com.br",
-    website: "www.especializadanorte.com.br",
-    indicadores: {
-      indiceSolucao: 80,
-      nivelServico: 77,
-      tempoResposta: "4h"
-    },
-    reputacao: "Bom" as const,
-    comentarios: [] as Comentario[]
-  },
-  {
-    id: "9",
-    nome: "IntegraTrans",
-    rating: 4.4,
-    totalAvaliacoes: 789,
-    regiao: "Sul",
-    porte: "Médio" as const,
-    tipoOperacao: ["Rodoviário", "Ferroviário"],
-    hasAwareSeal: true,
-    email: "contato@integratrans.com.br",
-    website: "www.integratrans.com.br",
-    indicadores: {
-      indiceSolucao: 86,
-      nivelServico: 83,
-      tempoResposta: "3h"
-    },
-    reputacao: "Bom" as const,
-    comentarios: [] as Comentario[]
-  },
-  {
-    id: "10",
-    nome: "ExpressGlobal",
-    rating: 3.6,
-    totalAvaliacoes: 243,
-    regiao: "Nordeste",
-    porte: "Médio" as const,
-    tipoOperacao: ["Expressa", "Aéreo"],
-    hasAwareSeal: false,
-    email: "contato@expressglobal.com.br",
-    website: "www.expressglobal.com.br",
-    indicadores: {
-      indiceSolucao: 70,
-      nivelServico: 68,
-      tempoResposta: "8h"
-    },
-    reputacao: "Regular" as const,
-    comentarios: [] as Comentario[]
-  }
 ];
