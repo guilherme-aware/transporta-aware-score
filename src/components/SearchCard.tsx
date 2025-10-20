@@ -62,6 +62,8 @@ export const SearchCard = ({ onSearch, onClear }: SearchCardProps) => {
                 <SelectItem value="Centro-Oeste">Centro-Oeste</SelectItem>
                 <SelectItem value="Nordeste">Nordeste</SelectItem>
                 <SelectItem value="Norte">Norte</SelectItem>
+                <SelectItem value="Brasil">Brasil</SelectItem>
+                <SelectItem value="Mundial">Mundial</SelectItem>
               </SelectContent>
             </Select>
           </div>
