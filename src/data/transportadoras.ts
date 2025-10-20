@@ -101,7 +101,7 @@ export const transportadorasData: Transportadora[] = [
   },
   {
     id: "4",
-    nome: "Dorf Ketal",
+    nome: "DRK Logística",
     logo: logoDRK,
     rating: 5,
     totalAvaliacoes: 1000,
@@ -109,8 +109,8 @@ export const transportadorasData: Transportadora[] = [
     porte: "Grande" as const,
     tipoOperacao: ["Rodoviário", "Expressa"],
     hasAwareSeal: true,
-    email: "queries.latinamerica@dorfketal.com",
-    website: "www.dorfketal.com",
+    email: "comercial@drklogistica.com.br",
+    website: "www.drklogistica.com.br",
     indicadores: {
       indiceSolucao: 100,
       nivelServico: 100,
