@@ -22,7 +22,6 @@ export const AwareBadge = ({ size = "md", showText = true }: AwareBadgeProps) =>
 
   return (
     <Badge
-      variant="secondary"
       className={`
         ${sizeClasses[size]} 
         bg-[hsl(var(--accent)/.4)] 
@@ -30,12 +29,14 @@ export const AwareBadge = ({ size = "md", showText = true }: AwareBadgeProps) =>
         text-[hsl(var(--primary))] 
         font-semibold shadow-sm
         flex items-center gap-1
-        transition-colors
+        transition-none
+        hover:bg-[hsl(var(--accent)/.4)]
       `}
     >
       <ShieldCheck 
-        className={`${iconSizes[size]} text-[hsl(var(--primary))]`}
-        strokeWidth={2.5} />
+        className={`${iconSizes[size]} text-[hsl(var(--primary))]`} 
+        strokeWidth={2.5} 
+      />
       <Award 
         className={`${iconSizes[size]} text-[hsl(var(--primary))]`} 
         strokeWidth={2.5} 
