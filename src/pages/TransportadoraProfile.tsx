@@ -13,14 +13,19 @@ import { StarRating } from "@/components/StarRating";
 import { AddComentarioModal } from "@/components/AddComentarioModal";
 import { transportadorasData, Comentario, Transportadora } from "@/data/transportadoras";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/contexts/AuthContext";
 
 const TransportadoraProfile = () => {
   const { id } = useParams();
   const { toast } = useToast();
+  const { loggedInTransportadora } = useAuth();
   const [transportadora, setTransportadora] = useState<Transportadora | undefined>(transportadorasData.find(t => t.id === id));
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  
+  // Check if logged in user can edit this profile
+  const canEdit = loggedInTransportadora?.id === id;
   
   // Edit states
   const [editedTipoOperacao, setEditedTipoOperacao] = useState(transportadora?.tipoOperacao || []);
@@ -204,39 +209,41 @@ const TransportadoraProfile = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Coluna Principal */}
           <div className="lg:col-span-2 space-y-8">
-            {/* Indicadores de Performance */}
-            <Card className="p-6">
-              <h2 className="text-xl font-semibold mb-6">Indicadores de Performance</h2>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">
-                    {transportadora.indicadores.indiceSolucao}%
+            {/* Indicadores de Performance - Only show if has Aware Seal */}
+            {transportadora.hasAwareSeal && (
+              <Card className="p-6">
+                <h2 className="text-xl font-semibold mb-6">Indicadores de Performance</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-primary mb-2">
+                      {transportadora.indicadores.indiceSolucao}%
+                    </div>
+                    <div className="text-sm font-medium text-muted-foreground mb-1">Índice de Solução</div>
+                    <div className="text-xs text-muted-foreground">
+                      Problemas resolvidos satisfatoriamente
+                    </div>
                   </div>
-                  <div className="text-sm font-medium text-muted-foreground mb-1">Índice de Solução</div>
-                  <div className="text-xs text-muted-foreground">
-                    Problemas resolvidos satisfatoriamente
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-primary mb-2">
+                      {transportadora.indicadores.nivelServico}%
+                    </div>
+                    <div className="text-sm font-medium text-muted-foreground mb-1">Nível de Serviço</div>
+                    <div className="text-xs text-muted-foreground">
+                      Entregas dentro do prazo acordado
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-primary mb-2">
+                      {transportadora.indicadores.tempoResposta}
+                    </div>
+                    <div className="text-sm font-medium text-muted-foreground mb-1">Tempo de Resposta</div>
+                    <div className="text-xs text-muted-foreground">
+                      Tempo médio para responder consultas
+                    </div>
                   </div>
                 </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">
-                    {transportadora.indicadores.nivelServico}%
-                  </div>
-                  <div className="text-sm font-medium text-muted-foreground mb-1">Nível de Serviço</div>
-                  <div className="text-xs text-muted-foreground">
-                    Entregas dentro do prazo acordado
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-primary mb-2">
-                    {transportadora.indicadores.tempoResposta}
-                  </div>
-                  <div className="text-sm font-medium text-muted-foreground mb-1">Tempo de Resposta</div>
-                  <div className="text-xs text-muted-foreground">
-                    Tempo médio para responder consultas
-                  </div>
-                </div>
-              </div>
-            </Card>
+              </Card>
+            )}
 
             {/* Comentários Recentes */}
             <Card className="p-6">
@@ -282,6 +289,7 @@ const TransportadoraProfile = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsEditingInfo(true)}
+                    disabled={!canEdit}
                   >
                     <Edit2 className="h-4 w-4" />
                   </Button>
@@ -399,6 +407,7 @@ const TransportadoraProfile = () => {
                     variant="ghost"
                     size="sm"
                     onClick={() => setIsEditingContact(true)}
+                    disabled={!canEdit}
                   >
                     <Edit2 className="h-4 w-4" />
                   </Button>

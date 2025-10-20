@@ -103,21 +103,8 @@ const Index = () => {
         <HeroSection />
       )}
 
-      <div className="flex">
-        {/* Sidebar */}
-        <aside className="lg:w-80 flex-shrink-0">
-          <div className="lg:sticky lg:top-16">
-            <FilterSidebar
-              filters={filters}
-              onFiltersChange={setFilters}
-              isOpen={isSidebarOpen}
-              onClose={() => setIsSidebarOpen(false)}
-            />
-          </div>
-        </aside>
-
-        {/* Main Content */}
-        <main className="flex-1 p-6">
+      {/* Main Content */}
+      <main className="container mx-auto px-6 py-8">
           {/* Search Card */}
           <SearchCard onSearch={handleSearch} onClear={handleClearSearch} />
 
@@ -202,7 +189,6 @@ const Index = () => {
             </div>
           )}
         </main>
-      </div>
     </div>
   );
 };

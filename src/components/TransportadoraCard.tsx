@@ -113,26 +113,28 @@ export const TransportadoraCard = ({
         </div>
       </div>
 
-      {/* Indicadores KPI */}
-      <div className="bg-muted/30 rounded-lg p-3 mb-4">
-        <h4 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
-          Indicadores de Performance
-        </h4>
-        <div className="grid grid-cols-3 gap-2">
-          <div className="text-center">
-            <div className="text-lg font-bold text-primary">{transportadora.indicadores.indiceSolucao}%</div>
-            <div className="text-xs text-muted-foreground">Solução</div>
-          </div>
-          <div className="text-center">
-            <div className="text-lg font-bold text-primary">{transportadora.indicadores.nivelServico}%</div>
-            <div className="text-xs text-muted-foreground">Serviço</div>
-          </div>
-          <div className="text-center">
-            <div className="text-lg font-bold text-primary">{transportadora.indicadores.tempoResposta}</div>
-            <div className="text-xs text-muted-foreground">Resposta</div>
+      {/* Indicadores KPI - Only show if has Aware Seal */}
+      {transportadora.hasAwareSeal && (
+        <div className="bg-muted/30 rounded-lg p-3 mb-4">
+          <h4 className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wide">
+            Indicadores de Performance
+          </h4>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="text-center">
+              <div className="text-lg font-bold text-primary">{transportadora.indicadores.indiceSolucao}%</div>
+              <div className="text-xs text-muted-foreground">Solução</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-bold text-primary">{transportadora.indicadores.nivelServico}%</div>
+              <div className="text-xs text-muted-foreground">Serviço</div>
+            </div>
+            <div className="text-center">
+              <div className="text-lg font-bold text-primary">{transportadora.indicadores.tempoResposta}</div>
+              <div className="text-xs text-muted-foreground">Resposta</div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
 
       {/* Actions */}
       <div className="flex gap-2">

@@ -1,7 +1,10 @@
-import { Search, Menu } from "lucide-react";
+import { Search, Menu, LogIn, LogOut, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useState } from "react";
 import awareLogo from "@/assets/aware-logo.png";
+import { useAuth } from "@/contexts/AuthContext";
+import { LoginModal } from "./LoginModal";
 
 interface HeaderProps {
   searchTerm: string;
@@ -10,16 +13,20 @@ interface HeaderProps {
 }
 
 export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps) => {
+  const { loggedInTransportadora, logout, isAuthenticated } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4 h-16 flex items-center">
-        {/* Logo */}
-        <div className="flex items-center space-x-2 mr-6">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
-            <img src={awareLogo} alt="LogiRep Logo" className="w-full h-full object-cover" />
+    <>
+      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+        <div className="container mx-auto px-4 h-16 flex items-center">
+          {/* Logo */}
+          <div className="flex items-center space-x-2 mr-6">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden">
+              <img src={awareLogo} alt="Aware.community Logo" className="w-full h-full object-cover" />
+            </div>
+            <h1 className="text-xl font-bold text-foreground">Aware.community</h1>
           </div>
-          <h1 className="text-xl font-bold text-foreground">LogiRep</h1>
-        </div>
 
         {/* Navigation */}
         <nav className="hidden md:flex items-center space-x-6 mr-8">
@@ -59,13 +66,38 @@ export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps
           <Menu className="h-5 w-5" />
         </Button>
 
-        {/* CTA Button */}
-        <div className="hidden md:flex ml-4">
-          <Button variant="aware" size="sm">
-            Avaliar Transportadora
-          </Button>
+        {/* User Info / Login Button */}
+        <div className="hidden md:flex ml-4 items-center gap-3">
+          {isAuthenticated && loggedInTransportadora ? (
+            <>
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg">
+                <div className="w-6 h-6 bg-background rounded flex items-center justify-center">
+                  {loggedInTransportadora.logo ? (
+                    <img 
+                      src={loggedInTransportadora.logo} 
+                      alt={loggedInTransportadora.nome}
+                      className="w-4 h-4 object-contain"
+                    />
+                  ) : (
+                    <Truck className="h-3 w-3 text-muted-foreground" />
+                  )}
+                </div>
+                <span className="text-sm font-medium">{loggedInTransportadora.nome}</span>
+              </div>
+              <Button variant="ghost" size="sm" onClick={logout}>
+                <LogOut className="h-4 w-4" />
+              </Button>
+            </>
+          ) : (
+            <Button variant="outline" size="sm" onClick={() => setIsLoginModalOpen(true)}>
+              <LogIn className="h-4 w-4 mr-2" />
+              Login
+            </Button>
+          )}
         </div>
       </div>
     </header>
+    <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+    </>
   );
 };

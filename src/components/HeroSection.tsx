@@ -17,18 +17,6 @@ export const HeroSection = () => {
             Compare, avalie e escolha transportadoras com base em reputação real, 
             avaliações de clientes e indicadores de desempenho logístico verificados.
           </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Button size="lg" className="min-w-48">
-              <Search className="mr-2 h-5 w-5" />
-              Buscar Transportadoras
-            </Button>
-            
-            <Button variant="aware" size="lg" className="min-w-48">
-              <Award className="mr-2 h-5 w-5" />
-              Avaliar Empresa
-            </Button>
-          </div>
         </div>
 
         {/* Key Features */}
