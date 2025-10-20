@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { transportadorasData } from "@/data/transportadoras";
 import { useAuth } from "@/contexts/AuthContext";
@@ -65,6 +66,16 @@ export const LoginModal = ({ isOpen, onClose }: LoginModalProps) => {
               </SelectContent>
             </Select>
           </div>
+          <div className="space-y-2">
+            <Label htmlFor="login-email">Email</Label>
+            <Input id="login-email" type="email" placeholder="Digite seu email aqui" />
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="login-password">Senha</Label>
+            <Input id="login-password" type="password" placeholder="********" />
+          </div>
+
           <Button onClick={handleLogin} className="w-full">
             Entrar
           </Button>
