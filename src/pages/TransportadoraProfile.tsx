@@ -189,9 +189,9 @@ const TransportadoraProfile = () => {
                   <Badge className={getReputationBadge(transportadora.reputacao)}>
                     {transportadora.reputacao}
                   </Badge>
-                  <span className="text-sm text-muted-foreground">
+                  {/* <span className="text-sm text-muted-foreground">
                     {transportadora.totalAvaliacoes} avaliações
-                  </span>
+                  </span> */}
                 </div>
               </div>
             </div>
