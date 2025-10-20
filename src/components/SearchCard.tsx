@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Search, X } from "lucide-react";
 
 interface SearchCardProps {
@@ -70,34 +71,50 @@ export const SearchCard = ({ onSearch, onClear }: SearchCardProps) => {
 
           <div className="space-y-2">
             <Label htmlFor="tipoOperacao">Tipo de Operação</Label>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                "Rodoviário",
-                "Ferroviário",
-                "Aéreo",
-                "Marítimo",
-                "Intermodal",
-                "Expressa",
-                "Carga Geral",
-                "Especializada",
-              ].map((tipo) => (
-                <label key={tipo} className="inline-flex items-center gap-2">
-                  <input
-                    type="checkbox"
-                    className="h-4 w-4"
-                    checked={tipoOperacao.includes(tipo)}
-                    onChange={(e) => {
-                      if (e.target.checked) {
-                        setTipoOperacao((prev) => [...prev, tipo]);
-                      } else {
-                        setTipoOperacao((prev) => prev.filter((t) => t !== tipo));
-                      }
-                    }}
-                  />
-                  <span className="text-sm">{tipo}</span>
-                </label>
-              ))}
-            </div>
+            <Popover>
+              <PopoverTrigger asChild>
+                <button
+                  type="button"
+                  className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                >
+                  <span className="truncate">
+                    {tipoOperacao.length > 0 ? tipoOperacao.join(", ") : "Selecione um ou mais tipos"}
+                  </span>
+                  <span className="text-muted-foreground">▾</span>
+                </button>
+              </PopoverTrigger>
+
+              <PopoverContent className="w-64">
+                <div className="grid grid-cols-1 gap-2">
+                  {[
+                    "Rodoviário",
+                    "Ferroviário",
+                    "Aéreo",
+                    "Marítimo",
+                    "Intermodal",
+                    "Expressa",
+                    "Carga Geral",
+                    "Especializada",
+                  ].map((tipo) => (
+                    <label key={tipo} className="inline-flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        className="h-4 w-4"
+                        checked={tipoOperacao.includes(tipo)}
+                        onChange={(e) => {
+                          if (e.target.checked) {
+                            setTipoOperacao((prev) => [...prev, tipo]);
+                          } else {
+                            setTipoOperacao((prev) => prev.filter((t) => t !== tipo));
+                          }
+                        }}
+                      />
+                      <span className="text-sm">{tipo}</span>
+                    </label>
+                  ))}
+                </div>
+              </PopoverContent>
+            </Popover>
           </div>
 
           <div className="space-y-2">
