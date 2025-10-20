@@ -33,7 +33,9 @@ export const AwareBadge = ({ size = "md", showText = true }: AwareBadgeProps) =>
         transition-colors
       `}
     >
-      <ShieldCheck className={`${iconSizes[size]} text-[hsl(var(--primary))]`} />
+      <ShieldCheck 
+        className={`${iconSizes[size]} text-[hsl(var(--primary))]`}
+        strokeWidth={2.5} />
       <Medal 
         className={`${iconSizes[size]} text-[hsl(var(--primary))]`} 
         strokeWidth={2.5} 
