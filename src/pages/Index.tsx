@@ -62,15 +62,16 @@ const Index = () => {
     window.open(`/transportadora/${id}`, '_blank');
   };
 
-  const handleSearch = (searchFilters: { nome: string; regiao: string; hasAwareSeal: string }) => {
+  const handleSearch = (searchFilters: { nome: string; regiao: string; tipoOperacao: string[]; hasAwareSeal: string }) => {
     setSearchTerm(searchFilters.nome);
-    
+
     const newFilters = {
       ...filters,
       regioes: searchFilters.regiao && searchFilters.regiao !== "all" ? [searchFilters.regiao] : [],
-      hasAwareSeal: searchFilters.hasAwareSeal === "yes"
+      tiposOperacao: searchFilters.tipoOperacao || [],
+      hasAwareSeal: searchFilters.hasAwareSeal === "yes",
     };
-    
+
     setFilters(newFilters);
   };
 
