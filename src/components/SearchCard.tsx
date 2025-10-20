@@ -10,6 +10,7 @@ interface SearchCardProps {
   onSearch: (filters: {
     nome: string;
     regiao: string;
+    tipoOperacao: string[];
     hasAwareSeal: string;
   }) => void;
   onClear: () => void;
@@ -18,15 +19,17 @@ interface SearchCardProps {
 export const SearchCard = ({ onSearch, onClear }: SearchCardProps) => {
   const [nome, setNome] = useState("");
   const [regiao, setRegiao] = useState("");
+  const [tipoOperacao, setTipoOperacao] = useState<string[]>([]);
   const [hasAwareSeal, setHasAwareSeal] = useState("");
 
   const handleApplyFilter = () => {
-    onSearch({ nome, regiao, hasAwareSeal });
+    onSearch({ nome, regiao, tipoOperacao, hasAwareSeal });
   };
 
   const handleClearFilters = () => {
     setNome("");
     setRegiao("");
+    setTipoOperacao([]);
     setHasAwareSeal("");
     onClear();
   };
@@ -61,6 +64,38 @@ export const SearchCard = ({ onSearch, onClear }: SearchCardProps) => {
                 <SelectItem value="Norte">Norte</SelectItem>
               </SelectContent>
             </Select>
+          </div>
+
+          <div className="space-y-2">
+            <Label htmlFor="tipoOperacao">Tipo de Operação</Label>
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                "Rodoviário",
+                "Ferroviário",
+                "Aéreo",
+                "Marítimo",
+                "Intermodal",
+                "Expressa",
+                "Carga Geral",
+                "Especializada",
+              ].map((tipo) => (
+                <label key={tipo} className="inline-flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    className="h-4 w-4"
+                    checked={tipoOperacao.includes(tipo)}
+                    onChange={(e) => {
+                      if (e.target.checked) {
+                        setTipoOperacao((prev) => [...prev, tipo]);
+                      } else {
+                        setTipoOperacao((prev) => prev.filter((t) => t !== tipo));
+                      }
+                    }}
+                  />
+                  <span className="text-sm">{tipo}</span>
+                </label>
+              ))}
+            </div>
           </div>
 
           <div className="space-y-2">
