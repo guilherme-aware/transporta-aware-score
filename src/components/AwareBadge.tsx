@@ -1,4 +1,4 @@
-import { Shield } from "lucide-react";
+import { ShieldCheck } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 interface AwareBadgeProps {
@@ -15,22 +15,24 @@ export const AwareBadge = ({ size = "md", showText = true }: AwareBadgeProps) =>
 
   const iconSizes = {
     sm: "h-3 w-3",
-    md: "h-4 w-4", 
+    md: "h-4 w-4",
     lg: "h-5 w-5"
   };
 
   return (
-    <Badge 
+    <Badge
       variant="secondary"
       className={`
         ${sizeClasses[size]} 
-        bg-aware text-aware-foreground font-semibold 
-        border-aware/20 shadow-sm
+        bg-[hsl(var(--accent)/.2)] 
+        border border-[hsl(var(--primary))] 
+        text-[hsl(var(--primary))] 
+        font-semibold shadow-sm
         flex items-center gap-1
-        hover:bg-aware-dark transition-colors
+        transition-colors
       `}
     >
-      <Shield className={iconSizes[size]} />
+      <ShieldCheck className={`${iconSizes[size]} text-[hsl(var(--primary))]`} />
       {showText && "Aware"}
     </Badge>
   );
