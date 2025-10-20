@@ -83,12 +83,12 @@ export const TransportadoraCard = ({
 
       {/* Rating e Avaliações */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center space-x-3">
+        {/* <div className="flex items-center space-x-3">
           <StarRating rating={transportadora.rating} size="sm" />
           <span className="text-sm text-muted-foreground">
             ({transportadora.totalAvaliacoes} avaliações)
           </span>
-        </div>
+        </div> */}
         
         <Badge className={getReputationBadge(transportadora.reputacao)}>
           {transportadora.reputacao}
