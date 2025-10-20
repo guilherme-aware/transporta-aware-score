@@ -148,7 +148,7 @@ export const transportadorasData: Transportadora[] = [
     regiao: "Sudeste",
     porte: "Grande" as const,
     tipoOperacao: ["Rodoviário", "Expressa"],
-    hasAwareSeal: true,
+    hasAwareSeal: false,
     email: "contato@rapidexlogistica.com.br",
     website: "www.rapidexlogistica.com.br",
     indicadores: {
@@ -168,7 +168,7 @@ export const transportadorasData: Transportadora[] = [
     regiao: "Sul",
     porte: "Médio" as const,
     tipoOperacao: ["Rodoviário", "Intermodal"],
-    hasAwareSeal: true,
+    hasAwareSeal: false,
     email: "contato@transcargabrasil.com.br",
     website: "www.transcargabrasil.com.br",
     indicadores: {
@@ -188,7 +188,7 @@ export const transportadorasData: Transportadora[] = [
     regiao: "Sudeste",
     porte: "Grande" as const,
     tipoOperacao: ["Aéreo", "Expressa"],
-    hasAwareSeal: true,
+    hasAwareSeal: false,
     email: "contato@aerotranscargo.com.br",
     website: "www.aerotranscargo.com.br",
     indicadores: {
@@ -208,7 +208,7 @@ export const transportadorasData: Transportadora[] = [
     regiao: "Sul",
     porte: "Grande" as const,
     tipoOperacao: ["Marítimo", "Intermodal"],
-    hasAwareSeal: true,
+    hasAwareSeal: false,
     email: "contato@martransportuario.com.br",
     website: "www.martransportuario.com.br",
     indicadores: {
