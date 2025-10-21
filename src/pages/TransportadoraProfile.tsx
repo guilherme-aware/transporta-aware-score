@@ -140,24 +140,31 @@ const TransportadoraProfile = () => {
       respostas: []
     };
 
-    const updatedData = transportadorasData.map(t => 
-      t.id === id 
-        ? { 
-            ...t, 
-            comentarios: [...(t.comentarios || []), comentario],
-            totalAvaliacoes: t.totalAvaliacoes + 1
-          } 
-        : t
-    );
-    
-    const updated = updatedData.find(t => t.id === id);
-    if (updated) {
-      setTransportadora(updated);
-      toast({
-        title: "Comentário adicionado",
-        description: "Seu comentário foi publicado com sucesso.",
-      });
+    // Update local transportadora state by appending the new comment
+    setTransportadora(prev => {
+      if (!prev) return prev;
+      return {
+        ...prev,
+        comentarios: [...(prev.comentarios || []), comentario],
+        totalAvaliacoes: (prev.totalAvaliacoes || 0) + 1
+      };
+    });
+
+    // Also update the in-memory data array so other parts of the app that read it
+    // during this session will see the new comment.
+    const idx = transportadorasData.findIndex(t => t.id === id);
+    if (idx !== -1) {
+      transportadorasData[idx] = {
+        ...transportadorasData[idx],
+        comentarios: [...(transportadorasData[idx].comentarios || []), comentario],
+        totalAvaliacoes: transportadorasData[idx].totalAvaliacoes + 1
+      };
     }
+
+    toast({
+      title: "Comentário adicionado",
+      description: "Seu comentário foi publicado com sucesso.",
+    });
   };
 
   const handleReplyComentario = (comentarioId: number) => {
@@ -174,34 +181,45 @@ const TransportadoraProfile = () => {
       respostas: []
     };
 
-    const addReplyToComentario = (comentarios: Comentario[]): Comentario[] => {
+    // Recursively walk the comments tree and append the reply to the matching comment's `respostas`
+    const appendReply = (comentarios: Comentario[] = []): Comentario[] => {
       return comentarios.map(c => {
         if (c.id === comentarioId) {
+          // preserve the original comment and only append the new reply
           return { ...c, respostas: [...(c.respostas || []), resposta] };
         }
+
         if (c.respostas && c.respostas.length > 0) {
-          return { ...c, respostas: addReplyToComentario(c.respostas) };
+          return { ...c, respostas: appendReply(c.respostas) };
         }
+
         return c;
       });
     };
 
-    const updatedData = transportadorasData.map(t => 
-      t.id === id 
-        ? { ...t, comentarios: addReplyToComentario(t.comentarios || []) }
-        : t
-    );
-    
-    const updated = updatedData.find(t => t.id === id);
-    if (updated) {
-      setTransportadora(updated);
-      setReplyingTo(null);
-      setReplyText("");
-      toast({
-        title: "Resposta adicionada",
-        description: "Sua resposta foi publicada com sucesso.",
-      });
+    // Update local component state from the current transportadora value to avoid accidentally
+    // replacing the whole comments tree with an incorrect structure.
+    setTransportadora(prev => {
+      if (!prev) return prev;
+      return { ...prev, comentarios: appendReply(prev.comentarios || []) };
+    });
+
+    // Also update the in-memory data array so other components reading `transportadorasData`
+    // see the change during this session. We replace only the comentarios of the matched entry.
+    const idx = transportadorasData.findIndex(t => t.id === id);
+    if (idx !== -1) {
+      transportadorasData[idx] = {
+        ...transportadorasData[idx],
+        comentarios: appendReply(transportadorasData[idx].comentarios || [])
+      };
     }
+
+    setReplyingTo(null);
+    setReplyText("");
+    toast({
+      title: "Resposta adicionada",
+      description: "Sua resposta foi publicada com sucesso.",
+    });
   };
 
   const handleSaveIndicadores = () => {
