@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, ExternalLink, Building2, Package, MapPin, Mail, Globe } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { AwareBadge } from "@/components/AwareBadge";
 
 const ComparePage = () => {
   const [searchParams] = useSearchParams();
@@ -52,6 +53,11 @@ const ComparePage = () => {
             )}
           </div>
           <CardTitle className="text-2xl">{transportadora.nome}</CardTitle>
+          {transportadora.hasAwareSeal && (
+            <div className="flex justify-center mt-2">
+              <AwareBadge size="md" showText={true} />
+            </div>
+          )}
         </CardHeader>
       </Card>
 
