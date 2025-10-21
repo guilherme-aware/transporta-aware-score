@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ArrowLeft, MapPin, Truck, Users, Phone, Mail, Globe, Star, Edit2, Save, X, Reply } from "lucide-react";
 import { Header } from "@/components/Header";
@@ -21,7 +21,7 @@ const TransportadoraProfile = () => {
   const { id } = useParams();
   const { toast } = useToast();
   const { loggedInTransportadora } = useAuth();
-  const [transportadora, setTransportadora] = useState<Transportadora | undefined>(transportadorasData.find(t => t.id === id));
+  const [transportadora, setTransportadora] = useState<Transportadora | undefined>(undefined);
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [isEditingContact, setIsEditingContact] = useState(false);
   const [isEditingIndicadores, setIsEditingIndicadores] = useState(false);
@@ -33,12 +33,12 @@ const TransportadoraProfile = () => {
   const canEdit = loggedInTransportadora?.id === id;
   
   // Edit states
-  const [editedTipoOperacao, setEditedTipoOperacao] = useState(transportadora?.tipoOperacao || []);
-  const [editedPorte, setEditedPorte] = useState(transportadora?.porte || "");
-  const [editedRegiao, setEditedRegiao] = useState(transportadora?.regiao || "");
-  const [editedNome, setEditedNome] = useState(transportadora?.nome || "");
-  const [editedEmail, setEditedEmail] = useState(transportadora?.email || "");
-  const [editedWebsite, setEditedWebsite] = useState(transportadora?.website || "");
+  const [editedTipoOperacao, setEditedTipoOperacao] = useState<string[]>([]);
+  const [editedPorte, setEditedPorte] = useState<string>("");
+  const [editedRegiao, setEditedRegiao] = useState<string>("");
+  const [editedNome, setEditedNome] = useState<string>("");
+  const [editedEmail, setEditedEmail] = useState<string>("");
+  const [editedWebsite, setEditedWebsite] = useState<string>("");
   
   // Indicadores disponíveis
   const indicadoresDisponiveis = [
@@ -53,8 +53,23 @@ const TransportadoraProfile = () => {
   ];
   
   const [editedIndicadores, setEditedIndicadores] = useState<string[]>(
-    transportadora?.indicadoresSelecionados || ["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"]
+    ["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"]
   );
+
+  // Load transportadora and sync editable fields when `id` changes
+  useEffect(() => {
+    const t = transportadorasData.find(t => t.id === id);
+    if (t) {
+      setTransportadora(t);
+      setEditedTipoOperacao(t.tipoOperacao || []);
+      setEditedPorte(t.porte || "");
+      setEditedRegiao(t.regiao || "");
+      setEditedNome(t.nome || "");
+      setEditedEmail(t.email || "");
+      setEditedWebsite(t.website || "");
+      setEditedIndicadores(t.indicadoresSelecionados || ["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"]);
+    }
+  }, [id]);
 
   if (!transportadora) {
     return (
