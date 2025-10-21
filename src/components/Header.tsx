@@ -90,14 +90,14 @@ export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps
             </>
           ) : (
             <>
+             <Button variant="aware" onClick={() => setIsLoginModalOpen(true)}>
+                Login
+              </Button>
               <Button 
                 variant="default" 
                 onClick={() => window.open('https://saas.awarelog.com/signup', '_blank')}
               >
                 Quero me cadastrar
-              </Button>
-              <Button variant="aware" onClick={() => setIsLoginModalOpen(true)}>
-                Login
               </Button>
             </>
           )}
