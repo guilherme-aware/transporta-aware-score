@@ -36,38 +36,44 @@ const ComparePage = () => {
     return null;
   }
 
-  const renderTransportadora = (transportadora: Transportadora) => (
-    <div className="flex-1 space-y-6">
-      {/* Logo e Nome */}
-      <Card>
-        <CardHeader className="text-center">
-          <div className="flex justify-center mb-4">
-            {transportadora.logo ? (
-              <img 
-                src={transportadora.logo} 
-                alt={`Logo ${transportadora.nome}`}
-                className="h-20 w-auto object-contain"
-              />
-            ) : (
-              <Building2 className="h-20 w-20 text-muted-foreground" />
-            )}
-          </div>
-          <CardTitle className="text-2xl">{transportadora.nome}</CardTitle>
-          {transportadora.hasAwareSeal && (
-            <div className="flex justify-center mt-2">
-              <AwareBadge size="md" showText={true} />
-            </div>
-          )}
-        </CardHeader>
-      </Card>
+  // Helpers to render paired cards so both columns stay aligned
+  const CARD_HEIGHT = "h-56"; // uniform height for all cards (adjust as needed)
 
-      {/* Indicadores de Performance */}
-      {transportadora.hasAwareSeal && transportadora.indicadores && (
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Indicadores de Performance</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
+  const renderLogoCard = (transportadora: Transportadora) => (
+    <Card className={`${CARD_HEIGHT} flex flex-col`}>
+      <CardHeader className="text-center flex-shrink-0">
+        <div className="flex justify-center mb-4">
+          {transportadora.logo ? (
+            <img
+              src={transportadora.logo}
+              alt={`Logo ${transportadora.nome}`}
+              className="h-20 w-auto object-contain"
+            />
+          ) : (
+            <Building2 className="h-20 w-20 text-muted-foreground" />
+          )}
+        </div>
+        <CardTitle className="text-2xl">{transportadora.nome}</CardTitle>
+        {/* reserve space for badge so height stays consistent */}
+        <div className="flex justify-center mt-2" style={{ minHeight: 28 }}>
+          {transportadora.hasAwareSeal ? (
+            <AwareBadge size="md" showText={true} />
+          ) : (
+            <div className="w-24" />
+          )}
+        </div>
+      </CardHeader>
+    </Card>
+  );
+
+  const renderIndicatorsCard = (transportadora: Transportadora) => (
+    <Card className={`${CARD_HEIGHT} flex flex-col`}>
+      <CardHeader className="flex-shrink-0">
+        <CardTitle className="text-lg">Indicadores de Performance</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3 flex-1 flex flex-col justify-center">
+        {transportadora.hasAwareSeal && transportadora.indicadores ? (
+          <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-sm font-medium">Índice de Solução</span>
               <Badge variant="secondary">{transportadora.indicadores.indiceSolucao}%</Badge>
@@ -84,80 +90,89 @@ const ComparePage = () => {
               <span className="text-sm font-medium">Pontualidade</span>
               <Badge variant="secondary">{transportadora.indicadores.pontualidade}%</Badge>
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Informações da Empresa */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Informações da Empresa</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="flex items-start gap-2">
-            <Package className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
-            <div>
-              <p className="text-sm font-medium">Tipo de Operação</p>
-              <p className="text-sm text-muted-foreground">{transportadora.tipoOperacao.join(", ")}</p>
-            </div>
           </div>
-          <div className="flex items-start gap-2">
-            <Building2 className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
-            <div>
-              <p className="text-sm font-medium">Porte</p>
-              <p className="text-sm text-muted-foreground">{transportadora.porte}</p>
-            </div>
+        ) : (
+          <div className="text-center text-sm text-muted-foreground">
+            Esta transportadora não possui Indicadores de Performance Aware.
           </div>
-          <div className="flex items-start gap-2">
-            <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
-            <div>
-              <p className="text-sm font-medium">Região</p>
-              <p className="text-sm text-muted-foreground">{transportadora.regiao}</p>
-            </div>
+        )}
+      </CardContent>
+    </Card>
+  );
+
+  const renderInfoCard = (transportadora: Transportadora) => (
+    <Card className={`${CARD_HEIGHT} flex flex-col`}>
+      <CardHeader className="flex-shrink-0">
+        <CardTitle className="text-lg">Informações da Empresa</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3 flex-1">
+        <div className="flex items-start gap-2">
+          <Package className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
+          <div>
+            <p className="text-sm font-medium">Tipo de Operação</p>
+            <p className="text-sm text-muted-foreground">{transportadora.tipoOperacao.join(", ")}</p>
           </div>
-        </CardContent>
-      </Card>
+        </div>
+        <div className="flex items-start gap-2">
+          <Building2 className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
+          <div>
+            <p className="text-sm font-medium">Porte</p>
+            <p className="text-sm text-muted-foreground">{transportadora.porte}</p>
+          </div>
+        </div>
+        <div className="flex items-start gap-2">
+          <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
+          <div>
+            <p className="text-sm font-medium">Região</p>
+            <p className="text-sm text-muted-foreground">{transportadora.regiao}</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
 
-      {/* Contato */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Contato</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-3">
-          {transportadora.email && (
-            <div className="flex items-center gap-2">
-              <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-              <a href={`mailto:${transportadora.email}`} className="text-sm hover:underline">
-                {transportadora.email}
-              </a>
-            </div>
-          )}
-          {transportadora.website && (
-            <div className="flex items-center gap-2">
-              <Globe className="h-4 w-4 text-muted-foreground flex-shrink-0" />
-              <a 
-                href={transportadora.website.startsWith('http') ? transportadora.website : `https://${transportadora.website}`} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-sm hover:underline"
-              >
-                {transportadora.website}
-              </a>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+  const renderContactCard = (transportadora: Transportadora) => (
+    <Card className={`${CARD_HEIGHT} flex flex-col`}>
+      <CardHeader className="flex-shrink-0">
+        <CardTitle className="text-lg">Contato</CardTitle>
+      </CardHeader>
+      <CardContent className="space-y-3 flex-1">
+        {transportadora.email ? (
+          <div className="flex items-center gap-2">
+            <Mail className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <a href={`mailto:${transportadora.email}`} className="text-sm hover:underline">
+              {transportadora.email}
+            </a>
+          </div>
+        ) : null}
+        {transportadora.website ? (
+          <div className="flex items-center gap-2">
+            <Globe className="h-4 w-4 text-muted-foreground flex-shrink-0" />
+            <a
+              href={transportadora.website.startsWith('http') ? transportadora.website : `https://${transportadora.website}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm hover:underline"
+            >
+              {transportadora.website}
+            </a>
+          </div>
+        ) : null}
+      </CardContent>
+    </Card>
+  );
 
-      {/* Botão Ver Perfil */}
-      <Button 
-        className="w-full" 
-        variant="outline"
-        onClick={() => navigate(`/transportadora/${transportadora.id}`)}
-      >
-        <ExternalLink className="h-4 w-4 mr-2" />
-        Ver Perfil Completo
-      </Button>
-    </div>
+  const renderButtonCard = (transportadora: Transportadora) => (
+      <div className="w-full px-4">
+        <Button
+          className="w-full"
+          variant="outline"
+          onClick={() => navigate(`/transportadora/${transportadora.id}`)}
+        >
+          <ExternalLink className="h-4 w-4 mr-2" />
+          Ver Perfil Completo
+        </Button>
+      </div>
   );
 
   return (
@@ -179,10 +194,32 @@ const ComparePage = () => {
           </p>
         </div>
 
-        {/* Comparação lado a lado */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {renderTransportadora(transportadoras[0])}
-          {renderTransportadora(transportadoras[1])}
+        {/* Comparação lado a lado - cada linha contém os dois cards correspondentes para alinhamento */}
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {renderLogoCard(transportadoras[0])}
+            {renderLogoCard(transportadoras[1])}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {renderIndicatorsCard(transportadoras[0])}
+            {renderIndicatorsCard(transportadoras[1])}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {renderInfoCard(transportadoras[0])}
+            {renderInfoCard(transportadoras[1])}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {renderContactCard(transportadoras[0])}
+            {renderContactCard(transportadoras[1])}
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {renderButtonCard(transportadoras[0])}
+            {renderButtonCard(transportadoras[1])}
+          </div>
         </div>
       </div>
     </div>
