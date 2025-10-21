@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/HeroSection";
 import { FilterSidebar } from "@/components/FilterSidebar";
@@ -7,6 +8,7 @@ import { SearchCard } from "@/components/SearchCard";
 import { transportadorasData } from "@/data/transportadoras";
 
 const Index = () => {
+  const navigate = useNavigate();
   const [searchTerm, setSearchTerm] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [filters, setFilters] = useState({
@@ -143,8 +145,13 @@ const Index = () => {
                   </div>
                   <div className="flex gap-2">
                     <button
-                      className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-dark transition-colors"
+                      className="px-4 py-2 bg-primary text-primary-foreground rounded-lg hover:bg-primary-dark transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                       disabled={selectedForComparison.length < 2}
+                      onClick={() => {
+                        if (selectedForComparison.length >= 2) {
+                          navigate(`/comparar?id1=${selectedForComparison[0]}&id2=${selectedForComparison[1]}`);
+                        }
+                      }}
                     >
                       Comparar Agora
                     </button>
