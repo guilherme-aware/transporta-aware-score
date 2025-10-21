@@ -205,14 +205,14 @@ const TransportadoraProfile = () => {
   };
 
   const handleSaveIndicadores = () => {
-    if (editedIndicadores.length > 4) {
-      toast({
-        title: "Erro",
-        description: "Selecione no máximo 4 indicadores.",
-        variant: "destructive"
-      });
-      return;
-    }
+    // if (editedIndicadores.length > 4) {
+    //   toast({
+    //     title: "Erro",
+    //     description: "Selecione no máximo 4 indicadores.",
+    //     variant: "destructive"
+    //   });
+    //   return;
+    // }
 
     const updatedData = transportadorasData.map(t => 
       t.id === id 
@@ -235,15 +235,15 @@ const TransportadoraProfile = () => {
     if (editedIndicadores.includes(indicador)) {
       setEditedIndicadores(editedIndicadores.filter(i => i !== indicador));
     } else {
-      if (editedIndicadores.length < 4) {
+      // if (editedIndicadores.length < 4) {
         setEditedIndicadores([...editedIndicadores, indicador]);
-      } else {
-        toast({
-          title: "Limite atingido",
-          description: "Você pode selecionar no máximo 4 indicadores.",
-          variant: "destructive"
-        });
-      }
+      // } else {
+      //   toast({
+      //     title: "Limite atingido",
+      //     description: "Você pode selecionar no máximo 4 indicadores.",
+      //     variant: "destructive"
+      //   });
+      // }
     }
   };
 
@@ -430,7 +430,7 @@ const TransportadoraProfile = () => {
                 {isEditingIndicadores ? (
                   <div className="space-y-4">
                     <div>
-                      <Label className="mb-3 block">Selecione até 4 indicadores</Label>
+                      <Label className="mb-3 block">Selecione indicadores</Label>
                       <div className="space-y-2">
                         {indicadoresDisponiveis.map(indicador => (
                           <div key={indicador} className="flex items-center space-x-2">
@@ -449,7 +449,7 @@ const TransportadoraProfile = () => {
                         ))}
                       </div>
                       <p className="text-sm text-muted-foreground mt-2">
-                        {editedIndicadores.length}/4 selecionados
+                        {editedIndicadores.length}/8 selecionados
                       </p>
                     </div>
                   </div>
