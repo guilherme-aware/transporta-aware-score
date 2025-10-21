@@ -45,7 +45,7 @@ export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps
         </nav>
 
         {/* Search Bar */}
-        <div className="flex-1 max-w-md relative">
+        {/* <div className="flex-1 max-w-md relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
           <Input
             type="search"
@@ -54,7 +54,7 @@ export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps
             onChange={(e) => onSearchChange(e.target.value)}
             className="pl-10 bg-muted/50"
           />
-        </div>
+        </div> */}
 
         {/* Mobile Menu Button */}
         <Button
@@ -66,8 +66,8 @@ export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps
           <Menu className="h-5 w-5" />
         </Button>
 
-        {/* User Info / Login Button */}
-        <div className="hidden md:flex ml-4 items-center gap-3">
+  {/* User Info / Login Button */}
+  <div className="hidden md:flex ml-auto items-center gap-3">
           {isAuthenticated && loggedInTransportadora ? (
             <>
               <div className="flex items-center gap-2 px-3 py-1.5 bg-muted rounded-lg">
@@ -90,14 +90,18 @@ export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps
             </>
           ) : (
             <>
-             <Button variant="aware" onClick={() => setIsLoginModalOpen(true)}>
-                Login
-              </Button>
+              <div className="hidden md:flex items-center justify-center px-3">
+                <span className="text-sm font-medium text-muted-foreground">Nao encontrou sua empresa?</span>
+              </div>
+
               <Button 
                 variant="default" 
                 onClick={() => window.open('https://saas.awarelog.com/signup', '_blank')}
               >
                 Quero me cadastrar
+              </Button>
+              <Button variant="aware" onClick={() => setIsLoginModalOpen(true)}>
+                Login
               </Button>
             </>
           )}
