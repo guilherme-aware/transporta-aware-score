@@ -43,14 +43,65 @@ const TransportadoraProfile = () => {
   // Indicadores disponíveis
   const indicadoresDisponiveis = [
     "Índice de Solução",
-    "Nível de Serviço", 
+    "Nível de Serviço",
     "Tempo de Resposta",
-    "Taxa de Entregas no Prazo",
-    "Avaliação de Atendimento",
-    "Tempo Médio de Coleta",
-    "Índice de Avarias",
-    "Rastreabilidade em Tempo Real"
+    "Eficiência Operacional",
+    "Pontualidade",
+    "Segurança da Carga",
+    "Sustentabilidade",
+    "Satisfação do Cliente",
+    "Flexibilidade",
+    "Tecnologia",
+    "Custo-Benefício"
   ];
+
+  // Mapeamento de nome de indicador para propriedade do objeto
+  const indicadorToProp: Record<string, { value: (t: Transportadora) => string | number, desc: string }> = {
+    "Índice de Solução": {
+      value: t => `${t.indicadores.indiceSolucao}%`,
+      desc: "Problemas resolvidos satisfatoriamente"
+    },
+    "Nível de Serviço": {
+      value: t => `${t.indicadores.nivelServico}%`,
+      desc: "Entregas dentro do prazo acordado"
+    },
+    "Tempo de Resposta": {
+      value: t => t.indicadores.tempoResposta,
+      desc: "Tempo médio para responder consultas"
+    },
+    "Eficiência Operacional": {
+      value: t => `${t.indicadores.eficienciaOperacional}%`,
+      desc: "Desempenho dos processos logísticos"
+    },
+    "Pontualidade": {
+      value: t => `${t.indicadores.pontualidade}%`,
+      desc: "Percentual de entregas pontuais"
+    },
+    "Segurança da Carga": {
+      value: t => `${t.indicadores.segurancaCarga}%`,
+      desc: "Índice de cargas entregues sem avarias"
+    },
+    "Sustentabilidade": {
+      value: t => `${t.indicadores.sustentabilidade}%`,
+      desc: "Adoção de práticas sustentáveis"
+    },
+    "Satisfação do Cliente": {
+      value: t => `${t.indicadores.satisfacaoCliente}%`,
+      desc: "Satisfação geral dos clientes"
+    },
+    "Flexibilidade": {
+      value: t => `${t.indicadores.flexibilidade}%`,
+      desc: "Capacidade de adaptação a demandas"
+    },
+    "Tecnologia": {
+      value: t => `${t.indicadores.tecnologia}%`,
+      desc: "Uso de tecnologia nos processos"
+    },
+    "Custo-Benefício": {
+      value: t => `${t.indicadores.custoBeneficio}%`,
+      desc: "Relação custo-benefício percebida"
+    },
+  };
   
   const [editedIndicadores, setEditedIndicadores] = useState<string[]>(
     ["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"]
@@ -482,7 +533,7 @@ const TransportadoraProfile = () => {
                         ))}
                       </div>
                       <p className="text-sm text-muted-foreground mt-2">
-                        {editedIndicadores.length}/8 selecionados
+                        {editedIndicadores.length}/{indicadoresDisponiveis.length} selecionados
                       </p>
                     </div>
                   </div>
@@ -491,21 +542,11 @@ const TransportadoraProfile = () => {
                     {(transportadora.indicadoresSelecionados || ["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"]).map(indicador => (
                       <div key={indicador} className="text-center">
                         <div className="text-3xl font-bold text-primary mb-2">
-                          {indicador === "Índice de Solução" && `${transportadora.indicadores.indiceSolucao}%`}
-                          {indicador === "Nível de Serviço" && `${transportadora.indicadores.nivelServico}%`}
-                          {indicador === "Tempo de Resposta" && transportadora.indicadores.tempoResposta}
-                          {!["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"].includes(indicador) && "N/A"}
+                          {indicadorToProp[indicador]?.value(transportadora) ?? "N/A"}
                         </div>
                         <div className="text-sm font-medium text-muted-foreground mb-1">{indicador}</div>
                         <div className="text-xs text-muted-foreground">
-                          {indicador === "Índice de Solução" && "Problemas resolvidos satisfatoriamente"}
-                          {indicador === "Nível de Serviço" && "Entregas dentro do prazo acordado"}
-                          {indicador === "Tempo de Resposta" && "Tempo médio para responder consultas"}
-                          {indicador === "Taxa de Entregas no Prazo" && "Percentual de entregas pontuais"}
-                          {indicador === "Avaliação de Atendimento" && "Satisfação com o atendimento"}
-                          {indicador === "Tempo Médio de Coleta" && "Tempo médio de coleta da mercadoria"}
-                          {indicador === "Índice de Avarias" && "Percentual de cargas avariadas"}
-                          {indicador === "Rastreabilidade em Tempo Real" && "Disponibilidade de rastreamento"}
+                          {indicadorToProp[indicador]?.desc ?? ""}
                         </div>
                       </div>
                     ))}
