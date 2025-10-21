@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams } from "react-router-dom";
-import { ArrowLeft, MapPin, Truck, Users, Phone, Mail, Globe, Star, Edit2, Save, X } from "lucide-react";
+import { ArrowLeft, MapPin, Truck, Users, Phone, Mail, Globe, Star, Edit2, Save, X, Reply } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -8,6 +8,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { Checkbox } from "@/components/ui/checkbox";
 import { AwareBadge } from "@/components/AwareBadge";
 import { StarRating } from "@/components/StarRating";
 import { AddComentarioModal } from "@/components/AddComentarioModal";
@@ -22,7 +24,10 @@ const TransportadoraProfile = () => {
   const [transportadora, setTransportadora] = useState<Transportadora | undefined>(transportadorasData.find(t => t.id === id));
   const [isEditingInfo, setIsEditingInfo] = useState(false);
   const [isEditingContact, setIsEditingContact] = useState(false);
+  const [isEditingIndicadores, setIsEditingIndicadores] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [replyingTo, setReplyingTo] = useState<number | null>(null);
+  const [replyText, setReplyText] = useState("");
   
   // Check if logged in user can edit this profile
   const canEdit = loggedInTransportadora?.id === id;
@@ -34,6 +39,22 @@ const TransportadoraProfile = () => {
   const [editedNome, setEditedNome] = useState(transportadora?.nome || "");
   const [editedEmail, setEditedEmail] = useState(transportadora?.email || "");
   const [editedWebsite, setEditedWebsite] = useState(transportadora?.website || "");
+  
+  // Indicadores disponíveis
+  const indicadoresDisponiveis = [
+    "Índice de Solução",
+    "Nível de Serviço", 
+    "Tempo de Resposta",
+    "Taxa de Entregas no Prazo",
+    "Avaliação de Atendimento",
+    "Tempo Médio de Coleta",
+    "Índice de Avarias",
+    "Rastreabilidade em Tempo Real"
+  ];
+  
+  const [editedIndicadores, setEditedIndicadores] = useState<string[]>(
+    transportadora?.indicadoresSelecionados || ["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"]
+  );
 
   if (!transportadora) {
     return (
@@ -110,11 +131,13 @@ const TransportadoraProfile = () => {
   const handleAddComentario = (novoComentario: { titulo: string; descricao: string; rating: number }) => {
     const comentario: Comentario = {
       id: Date.now(),
-      autor: "Usuário Anônimo",
+      autor: loggedInTransportadora?.nome || "Usuário Anônimo",
+      autorId: loggedInTransportadora?.id,
       rating: novoComentario.rating,
       data: new Date().toISOString().split('T')[0],
       titulo: novoComentario.titulo,
-      descricao: novoComentario.descricao
+      descricao: novoComentario.descricao,
+      respostas: []
     };
 
     const updatedData = transportadorasData.map(t => 
@@ -136,6 +159,164 @@ const TransportadoraProfile = () => {
       });
     }
   };
+
+  const handleReplyComentario = (comentarioId: number) => {
+    if (!replyText.trim()) return;
+
+    const resposta: Comentario = {
+      id: Date.now(),
+      autor: loggedInTransportadora?.nome || "Usuário Anônimo",
+      autorId: loggedInTransportadora?.id,
+      rating: 0,
+      data: new Date().toISOString().split('T')[0],
+      titulo: "",
+      descricao: replyText,
+      respostas: []
+    };
+
+    const addReplyToComentario = (comentarios: Comentario[]): Comentario[] => {
+      return comentarios.map(c => {
+        if (c.id === comentarioId) {
+          return { ...c, respostas: [...(c.respostas || []), resposta] };
+        }
+        if (c.respostas && c.respostas.length > 0) {
+          return { ...c, respostas: addReplyToComentario(c.respostas) };
+        }
+        return c;
+      });
+    };
+
+    const updatedData = transportadorasData.map(t => 
+      t.id === id 
+        ? { ...t, comentarios: addReplyToComentario(t.comentarios || []) }
+        : t
+    );
+    
+    const updated = updatedData.find(t => t.id === id);
+    if (updated) {
+      setTransportadora(updated);
+      setReplyingTo(null);
+      setReplyText("");
+      toast({
+        title: "Resposta adicionada",
+        description: "Sua resposta foi publicada com sucesso.",
+      });
+    }
+  };
+
+  const handleSaveIndicadores = () => {
+    if (editedIndicadores.length > 4) {
+      toast({
+        title: "Erro",
+        description: "Selecione no máximo 4 indicadores.",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const updatedData = transportadorasData.map(t => 
+      t.id === id 
+        ? { ...t, indicadoresSelecionados: editedIndicadores }
+        : t
+    );
+    
+    const updated = updatedData.find(t => t.id === id);
+    if (updated) {
+      setTransportadora(updated);
+      setIsEditingIndicadores(false);
+      toast({
+        title: "Indicadores atualizados",
+        description: "Os indicadores de performance foram salvos com sucesso.",
+      });
+    }
+  };
+
+  const toggleIndicador = (indicador: string) => {
+    if (editedIndicadores.includes(indicador)) {
+      setEditedIndicadores(editedIndicadores.filter(i => i !== indicador));
+    } else {
+      if (editedIndicadores.length < 4) {
+        setEditedIndicadores([...editedIndicadores, indicador]);
+      } else {
+        toast({
+          title: "Limite atingido",
+          description: "Você pode selecionar no máximo 4 indicadores.",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
+  const renderComentario = (comentario: Comentario, isReply: boolean = false) => (
+    <div key={comentario.id} className={`border-b border-border pb-6 last:border-b-0 ${isReply ? 'ml-8 mt-4' : ''}`}>
+      <div className="flex items-start justify-between mb-3">
+        <div className="flex-1">
+          <div className="flex items-center gap-3 mb-1">
+            <span className="font-medium">{comentario.autor}</span>
+          </div>
+          {!isReply && (
+            <div className="flex items-center gap-2 mb-2">
+              <StarRating rating={comentario.rating} size="sm" />
+              <span className="text-sm text-muted-foreground">
+                {new Date(comentario.data).toLocaleDateString('pt-BR')}
+              </span>
+            </div>
+          )}
+          {isReply && (
+            <span className="text-sm text-muted-foreground">
+              {new Date(comentario.data).toLocaleDateString('pt-BR')}
+            </span>
+          )}
+          {comentario.titulo && <h3 className="font-medium text-sm mb-1">{comentario.titulo}</h3>}
+        </div>
+      </div>
+      <p className="text-sm text-foreground mb-3">{comentario.descricao}</p>
+      
+      {canEdit && !isReply && (
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setReplyingTo(comentario.id)}
+          className="mb-3"
+        >
+          <Reply className="h-4 w-4 mr-2" />
+          Responder
+        </Button>
+      )}
+
+      {replyingTo === comentario.id && (
+        <div className="mt-3 space-y-2">
+          <Textarea
+            placeholder="Escreva sua resposta..."
+            value={replyText}
+            onChange={(e) => setReplyText(e.target.value)}
+            className="min-h-[80px]"
+          />
+          <div className="flex gap-2">
+            <Button onClick={() => handleReplyComentario(comentario.id)} size="sm">
+              Enviar
+            </Button>
+            <Button 
+              variant="outline" 
+              size="sm"
+              onClick={() => {
+                setReplyingTo(null);
+                setReplyText("");
+              }}
+            >
+              Cancelar
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {comentario.respostas && comentario.respostas.length > 0 && (
+        <div className="mt-4">
+          {comentario.respostas.map(resposta => renderComentario(resposta, true))}
+        </div>
+      )}
+    </div>
+  );
 
   const tipoOperacaoOptions = ["Rodoviário", "Aéreo", "Marítimo", "Ferroviário", "Expressa", "Intermodal", "Carga Geral", "Especializada"];
 
@@ -212,36 +393,91 @@ const TransportadoraProfile = () => {
             {/* Indicadores de Performance - Only show if has Aware Seal */}
             {transportadora.hasAwareSeal && (
               <Card className="p-6">
-                <h2 className="text-xl font-semibold mb-6">Indicadores de Performance</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      {transportadora.indicadores.indiceSolucao}%
+                <div className="flex items-center justify-between mb-6">
+                  <h2 className="text-xl font-semibold">Indicadores de Performance</h2>
+                  {!isEditingIndicadores ? (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={() => setIsEditingIndicadores(true)}
+                      disabled={!canEdit}
+                    >
+                      <Edit2 className="h-4 w-4" />
+                    </Button>
+                  ) : (
+                    <div className="flex gap-2">
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => {
+                          setIsEditingIndicadores(false);
+                          setEditedIndicadores(transportadora?.indicadoresSelecionados || ["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"]);
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={handleSaveIndicadores}
+                      >
+                        <Save className="h-4 w-4" />
+                      </Button>
                     </div>
-                    <div className="text-sm font-medium text-muted-foreground mb-1">Índice de Solução</div>
-                    <div className="text-xs text-muted-foreground">
-                      Problemas resolvidos satisfatoriamente
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      {transportadora.indicadores.nivelServico}%
-                    </div>
-                    <div className="text-sm font-medium text-muted-foreground mb-1">Nível de Serviço</div>
-                    <div className="text-xs text-muted-foreground">
-                      Entregas dentro do prazo acordado
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-primary mb-2">
-                      {transportadora.indicadores.tempoResposta}
-                    </div>
-                    <div className="text-sm font-medium text-muted-foreground mb-1">Tempo de Resposta</div>
-                    <div className="text-xs text-muted-foreground">
-                      Tempo médio para responder consultas
-                    </div>
-                  </div>
+                  )}
                 </div>
+
+                {isEditingIndicadores ? (
+                  <div className="space-y-4">
+                    <div>
+                      <Label className="mb-3 block">Selecione até 4 indicadores</Label>
+                      <div className="space-y-2">
+                        {indicadoresDisponiveis.map(indicador => (
+                          <div key={indicador} className="flex items-center space-x-2">
+                            <Checkbox
+                              id={indicador}
+                              checked={editedIndicadores.includes(indicador)}
+                              onCheckedChange={() => toggleIndicador(indicador)}
+                            />
+                            <label
+                              htmlFor={indicador}
+                              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                            >
+                              {indicador}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-2">
+                        {editedIndicadores.length}/4 selecionados
+                      </p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    {(transportadora.indicadoresSelecionados || ["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"]).map(indicador => (
+                      <div key={indicador} className="text-center">
+                        <div className="text-3xl font-bold text-primary mb-2">
+                          {indicador === "Índice de Solução" && `${transportadora.indicadores.indiceSolucao}%`}
+                          {indicador === "Nível de Serviço" && `${transportadora.indicadores.nivelServico}%`}
+                          {indicador === "Tempo de Resposta" && transportadora.indicadores.tempoResposta}
+                          {!["Índice de Solução", "Nível de Serviço", "Tempo de Resposta"].includes(indicador) && "N/A"}
+                        </div>
+                        <div className="text-sm font-medium text-muted-foreground mb-1">{indicador}</div>
+                        <div className="text-xs text-muted-foreground">
+                          {indicador === "Índice de Solução" && "Problemas resolvidos satisfatoriamente"}
+                          {indicador === "Nível de Serviço" && "Entregas dentro do prazo acordado"}
+                          {indicador === "Tempo de Resposta" && "Tempo médio para responder consultas"}
+                          {indicador === "Taxa de Entregas no Prazo" && "Percentual de entregas pontuais"}
+                          {indicador === "Avaliação de Atendimento" && "Satisfação com o atendimento"}
+                          {indicador === "Tempo Médio de Coleta" && "Tempo médio de coleta da mercadoria"}
+                          {indicador === "Índice de Avarias" && "Percentual de cargas avariadas"}
+                          {indicador === "Rastreabilidade em Tempo Real" && "Disponibilidade de rastreamento"}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </Card>
             )}
 
@@ -250,25 +486,7 @@ const TransportadoraProfile = () => {
               <h2 className="text-xl font-semibold mb-6">Comentários Recentes</h2>
               <div className="space-y-6">
                 {transportadora.comentarios && transportadora.comentarios.length > 0 ? (
-                  transportadora.comentarios.map((comentario) => (
-                    <div key={comentario.id} className="border-b border-border pb-6 last:border-b-0">
-                      <div className="flex items-start justify-between mb-3">
-                        <div>
-                          <div className="flex items-center gap-3 mb-1">
-                            <span className="font-medium">{comentario.autor}</span>
-                          </div>
-                          <div className="flex items-center gap-2 mb-2">
-                            <StarRating rating={comentario.rating} size="sm" />
-                            <span className="text-sm text-muted-foreground">
-                              {new Date(comentario.data).toLocaleDateString('pt-BR')}
-                            </span>
-                          </div>
-                          <h3 className="font-medium text-sm mb-1">{comentario.titulo}</h3>
-                        </div>
-                      </div>
-                      <p className="text-sm text-foreground">{comentario.descricao}</p>
-                    </div>
-                  ))
+                  transportadora.comentarios.map((comentario) => renderComentario(comentario))
                 ) : (
                   <p className="text-sm text-muted-foreground text-center py-8">
                     Nenhum comentário ainda. Seja o primeiro a avaliar esta transportadora!

@@ -11,10 +11,12 @@ import logoDSV from "@/assets/logo-dsv.png";
 export interface Comentario {
   id: number;
   autor: string;
+  autorId?: string;
   rating: number;
   data: string;
   titulo: string;
   descricao: string;
+  respostas?: Comentario[];
 }
 
 export interface Transportadora {
@@ -34,6 +36,7 @@ export interface Transportadora {
     nivelServico: number;
     tempoResposta: string;
   };
+  indicadoresSelecionados?: string[];
   reputacao: "Excelente" | "Bom" | "Regular" | "Ruim";
   comentarios: Comentario[];
 }

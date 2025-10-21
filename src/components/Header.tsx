@@ -1,4 +1,4 @@
-import { Search, Menu, LogIn, LogOut, Truck } from "lucide-react";
+import { Search, Menu, LogOut, Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
@@ -89,10 +89,17 @@ export const Header = ({ searchTerm, onSearchChange, onMenuToggle }: HeaderProps
               </Button>
             </>
           ) : (
-            <Button variant="outline" size="sm" onClick={() => setIsLoginModalOpen(true)}>
-              <LogIn className="h-4 w-4 mr-2" />
-              Login
-            </Button>
+            <>
+              <Button 
+                variant="default" 
+                onClick={() => window.open('https://saas.awarelog.com/signup', '_blank')}
+              >
+                Quero me cadastrar
+              </Button>
+              <Button variant="aware" onClick={() => setIsLoginModalOpen(true)}>
+                Login
+              </Button>
+            </>
           )}
         </div>
       </div>
