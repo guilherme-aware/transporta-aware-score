@@ -163,7 +163,38 @@ export const transportadorasData: Transportadora[] = [
       custoBeneficio: 98,
     },
     reputacao: "Excelente" as const,
-    comentarios: [] as Comentario[],
+    comentarios: [
+      {
+        id: 101,
+        autor: "Cliente Logística Norte",
+        rating: 5,
+        data: "2025-10-10",
+        titulo: "Entrega rápida e sem avarias",
+        descricao:
+          "Trabalhamos com a Cozapi há meses e sempre entregam no prazo. Ótima comunicação e sem avarias nas cargas.",
+        respostas: [],
+      },
+      {
+        id: 102,
+        autor: "Operador de Armazém",
+        rating: 4,
+        data: "2025-09-22",
+        titulo: "Boa experiência, dúvida sobre rastreamento",
+        descricao:
+          "Estou muito satisfeito, porém às vezes o rastreamento demora a atualizar. Há previsão de melhoria?",
+        respostas: [],
+      },
+      {
+        id: 103,
+        autor: "Transportador Parceiro",
+        rating: 5,
+        data: "2025-08-15",
+        titulo: "Profissionalismo e suporte",
+        descricao:
+          "Equipe muito profissional, o suporte resolveu um problema de última hora e evitou um atraso grande. Recomendo.",
+        respostas: [],
+      },
+    ] as Comentario[],
   },
   {
     id: "4",
