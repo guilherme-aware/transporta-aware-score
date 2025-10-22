@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { AwareBadge } from "@/components/AwareBadge";
@@ -35,7 +36,7 @@ const TransportadoraProfile = () => {
   // Edit states
   const [editedTipoOperacao, setEditedTipoOperacao] = useState<string[]>([]);
   const [editedPorte, setEditedPorte] = useState<string>("");
-  const [editedRegiao, setEditedRegiao] = useState<string>("");
+  const [editedRegiao, setEditedRegiao] = useState<string[]>([]);
   const [editedNome, setEditedNome] = useState<string>("");
   const [editedEmail, setEditedEmail] = useState<string>("");
   const [editedWebsite, setEditedWebsite] = useState<string>("");
@@ -114,7 +115,7 @@ const TransportadoraProfile = () => {
       setTransportadora(t);
       setEditedTipoOperacao(t.tipoOperacao || []);
       setEditedPorte(t.porte || "");
-      setEditedRegiao(t.regiao || "");
+      setEditedRegiao(t.regiao || []);
       setEditedNome(t.nome || "");
       setEditedEmail(t.email || "");
       setEditedWebsite(t.website || "");
@@ -614,19 +615,40 @@ const TransportadoraProfile = () => {
                 <div className="space-y-4">
                   <div>
                     <Label>Tipo de Operação</Label>
-                    <Select
-                      value={editedTipoOperacao[0]}
-                      onValueChange={(value) => setEditedTipoOperacao([value])}
-                    >
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {tipoOperacaoOptions.map(tipo => (
-                          <SelectItem key={tipo} value={tipo}>{tipo}</SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        >
+                          <span className="truncate">
+                            {editedTipoOperacao.length > 0 ? editedTipoOperacao.join(", ") : "Selecione um ou mais tipos"}
+                          </span>
+                          <span className="text-muted-foreground">▾</span>
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-64">
+                        <div className="grid grid-cols-1 gap-2">
+                          {["Rodoviário", "Ferroviário", "Aéreo", "Marítimo", "Intermodal", "Expressa", "Carga Geral", "Especializada"].map((tipo) => (
+                            <label key={tipo} className="inline-flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                className="h-4 w-4"
+                                checked={editedTipoOperacao.includes(tipo)}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setEditedTipoOperacao((prev) => [...prev, tipo]);
+                                  } else {
+                                    setEditedTipoOperacao((prev) => prev.filter((t) => t !== tipo));
+                                  }
+                                }}
+                              />
+                              <span className="text-sm">{tipo}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                   
                   <div>
@@ -645,18 +667,40 @@ const TransportadoraProfile = () => {
 
                   <div>
                     <Label>Região</Label>
-                    <Select value={editedRegiao} onValueChange={setEditedRegiao}>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Norte">Norte</SelectItem>
-                        <SelectItem value="Nordeste">Nordeste</SelectItem>
-                        <SelectItem value="Centro-Oeste">Centro-Oeste</SelectItem>
-                        <SelectItem value="Sudeste">Sudeste</SelectItem>
-                        <SelectItem value="Sul">Sul</SelectItem>
-                      </SelectContent>
-                    </Select>
+                    <Popover>
+                      <PopoverTrigger asChild>
+                        <button
+                          type="button"
+                          className="flex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm"
+                        >
+                          <span className="truncate">
+                            {editedRegiao.length > 0 ? editedRegiao.join(", ") : "Selecione uma ou mais regiões"}
+                          </span>
+                          <span className="text-muted-foreground">▾</span>
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-64">
+                        <div className="grid grid-cols-1 gap-2">
+                          {["Norte", "Nordeste", "Centro-Oeste", "Sudeste", "Sul", "Brasil", "Mundial"].map((regiao) => (
+                            <label key={regiao} className="inline-flex items-center gap-2">
+                              <input
+                                type="checkbox"
+                                className="h-4 w-4"
+                                checked={editedRegiao.includes(regiao)}
+                                onChange={(e) => {
+                                  if (e.target.checked) {
+                                    setEditedRegiao((prev) => [...prev, regiao]);
+                                  } else {
+                                    setEditedRegiao((prev) => prev.filter((r) => r !== regiao));
+                                  }
+                                }}
+                              />
+                              <span className="text-sm">{regiao}</span>
+                            </label>
+                          ))}
+                        </div>
+                      </PopoverContent>
+                    </Popover>
                   </div>
                 </div>
               ) : (
@@ -683,7 +727,7 @@ const TransportadoraProfile = () => {
                     <MapPin className="h-4 w-4 text-muted-foreground" />
                     <div>
                       <div className="text-sm font-medium">Região</div>
-                      <div className="text-sm text-muted-foreground">{transportadora.regiao}</div>
+                      <div className="text-sm text-muted-foreground">{transportadora.regiao.join(", ")}</div>
                     </div>
                   </div>
                 </div>

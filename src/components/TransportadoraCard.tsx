@@ -11,7 +11,7 @@ interface TransportadoraData {
   logo?: string;
   rating: number;
   totalAvaliacoes: number;
-  regiao: string;
+  regiao: string[];
   porte: "Pequeno" | "Médio" | "Grande";
   tipoOperacao: string[];
   hasAwareSeal: boolean;
@@ -71,7 +71,7 @@ export const TransportadoraCard = ({
             <h3 className="font-semibold text-lg text-foreground">{transportadora.nome}</h3>
             <div className="flex items-center gap-2 mt-1">
               <MapPin className="h-3 w-3 text-muted-foreground" />
-              <span className="text-sm text-muted-foreground">{transportadora.regiao}</span>
+              <span className="text-sm text-muted-foreground">{transportadora.regiao.join(", ")}</span>
             </div>
           </div>
         </div>

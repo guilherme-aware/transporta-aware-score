@@ -25,7 +25,7 @@ export interface Transportadora {
   logo?: string;
   rating: number;
   totalAvaliacoes: number;
-  regiao: string;
+  regiao: string[];
   porte: "Pequeno" | "Médio" | "Grande";
   tipoOperacao: string[];
   hasAwareSeal: boolean;
@@ -56,7 +56,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoGMS,
     rating: 5,
     totalAvaliacoes: 1000,
-    regiao: "Nordeste",
+    regiao: ["Nordeste"],
     porte: "Grande" as const,
     tipoOperacao: ["Rodoviário", "Expressa"],
     hasAwareSeal: true,
@@ -112,7 +112,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoGrupoSanches,
     rating: 5,
     totalAvaliacoes: 1000,
-    regiao: "Brasil",
+    regiao: ["Brasil"],
     porte: "Grande" as const,
     tipoOperacao: ["Rodoviário", "Expressa"],
     hasAwareSeal: true,
@@ -140,7 +140,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoCozapi,
     rating: 5,
     totalAvaliacoes: 1000,
-    regiao: "Brasil",
+    regiao: ["Brasil"],
     porte: "Grande" as const,
     tipoOperacao: ["Rodoviário", "Expressa"],
     hasAwareSeal: true,
@@ -168,7 +168,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoDRK,
     rating: 5,
     totalAvaliacoes: 1000,
-    regiao: "Mundial",
+    regiao: ["Mundial"],
     porte: "Grande" as const,
     tipoOperacao: ["Rodoviário", "Expressa"],
     hasAwareSeal: true,
@@ -196,7 +196,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoDSV,
     rating: 5,
     totalAvaliacoes: 1000,
-    regiao: "Mundial",
+    regiao: ["Mundial"],
     porte: "Grande" as const,
     tipoOperacao: ["Rodoviário", "Expressa"],
     hasAwareSeal: true,
@@ -224,7 +224,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoRapidex,
     rating: 4.8,
     totalAvaliacoes: 1247,
-    regiao: "Sudeste",
+    regiao: ["Sudeste"],
     porte: "Grande" as const,
     tipoOperacao: ["Rodoviário", "Expressa"],
     hasAwareSeal: false,
@@ -252,7 +252,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoTranscarga,
     rating: 4.5,
     totalAvaliacoes: 856,
-    regiao: "Sul",
+    regiao: ["Sul"],
     porte: "Médio" as const,
     tipoOperacao: ["Rodoviário", "Intermodal"],
     hasAwareSeal: false,
@@ -280,7 +280,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoAerotrans,
     rating: 4.7,
     totalAvaliacoes: 623,
-    regiao: "Sudeste",
+    regiao: ["Sudeste"],
     porte: "Grande" as const,
     tipoOperacao: ["Aéreo", "Expressa"],
     hasAwareSeal: false,
@@ -308,7 +308,7 @@ export const transportadorasData: Transportadora[] = [
     logo: logoMartrans,
     rating: 4.6,
     totalAvaliacoes: 387,
-    regiao: "Sul",
+    regiao: ["Sul"],
     porte: "Grande" as const,
     tipoOperacao: ["Marítimo", "Intermodal"],
     hasAwareSeal: false,

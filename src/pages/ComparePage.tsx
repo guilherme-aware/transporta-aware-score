@@ -124,7 +124,7 @@ const ComparePage = () => {
           <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground flex-shrink-0" />
           <div>
             <p className="text-sm font-medium">Região</p>
-            <p className="text-sm text-muted-foreground">{transportadora.regiao}</p>
+            <p className="text-sm text-muted-foreground">{transportadora.regiao.join(", ")}</p>
           </div>
         </div>
       </CardContent>

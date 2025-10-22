@@ -28,7 +28,8 @@ const Index = () => {
       }
 
       // Region filter
-      if (filters.regioes.length > 0 && !filters.regioes.includes(transportadora.regiao)) {
+      if (filters.regioes.length > 0 && 
+          !filters.regioes.some(regiao => transportadora.regiao.includes(regiao))) {
         return false;
       }
 
